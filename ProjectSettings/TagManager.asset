@@ -46,5 +46,23 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: BackgroundMoon
+    uniqueID: 1456563101
+    locked: 0
+  - name: Mont1
+    uniqueID: 4156349341
+    locked: 0
+  - name: Mont2
+    uniqueID: 606523965
+    locked: 0
+  - name: Start
+    uniqueID: 3609983755
+    locked: 0
+  - name: Tree
+    uniqueID: 2483515029
+    locked: 0
+  - name: Player
+    uniqueID: 330851187
+    locked: 0
   m_RenderingLayers:
   - Default

@@ -93,8 +93,11 @@ Resultado2:
 // utilizando esta condicion
 pos_camera.x + cameraWidth > pos_fondoA.x + spriteWidth/2
 ```
+2. Un GameObject empty para controlar los fondos y la velocidad de camara
+![alt text](image-4.png) 
+
 
 Resultado:
+La camara mueve hacia derecha, y los fondos intercambian cuando cumple la condicion.
 ![alt text](Unity_bCrvCehYX0.gif)
 
-<!-- Resultado mejorado: -->
