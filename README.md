@@ -88,4 +88,13 @@ Resultado2:
 
 ## La cámara se desplaza a la derecha y el fondo está estático. 
 ### Tarea: Aplicar un fondo con scroll a tu escena utilizando la técnica descrita en b.
+1. En este caso solo se intercambia cuando el borde derecho de la camara es mayor que la posicion central del fondo
+```
+// utilizando esta condicion
+pos_camera.x + cameraWidth > pos_fondoA.x + spriteWidth/2
+```
 
+Resultado:
+![alt text](Unity_bCrvCehYX0.gif)
+
+<!-- Resultado mejorado: -->

@@ -14,11 +14,10 @@ public class ParallaxBackground : MonoBehaviour
 
     void Start()
     {
-        SpriteRenderer spriteRenderer = fondoActual.GetComponent<SpriteRenderer>();
         // obtener ancho del fondoA       * ambos son iguales
-        spriteWidth = spriteRenderer.bounds.size.x;
-        // fondoAuxiliar.position.x = fondoActual.position.x + spriteWidth
+        spriteWidth = fondoActual.GetComponent<SpriteRenderer>().bounds.size.x;
 
+        // posicion inicial
         posxini = fondoActual.position.x;
     }
 
@@ -31,6 +30,8 @@ public class ParallaxBackground : MonoBehaviour
         fondoAuxiliar.Translate(Vector3.left * moveDistance);
         
         // modificar un poco, quitar / 2f, puesto que se queda la mitad y intercambia
+        // posicion actual del fondo A sale de la pantalla, intercambia
+        // if (fondoActual.position.x < posxini - spriteWidth / 2f)
         if (fondoActual.position.x < posxini - spriteWidth)
         {
             SwapBackgrounds();
