@@ -101,3 +101,125 @@ Resultado:
 La camara mueve hacia derecha, y los fondos intercambian cuando cumple la condicion.
 ![alt text](Unity_bCrvCehYX0.gif)
 
+
+## Desplazar el punto a partir del cual se aplica la textura. La parte sobrante se aplica en el espacio vacío.
+### Tarea: Aplicar un fondo a tu escena aplicando la técnica del desplazamiento de textura
+1. Configuracion de la textura
+![alt text](image-6.png)
+
+2. Configuracion de un objeto **Plane** como fondo 
+![alt text](image-5.png)
+
+3. Crear un script para aplicar el offset al material
+```
+void Update()
+{
+    offsetX += scrollSpeed * Time.deltaTime;
+
+    // Apply the offset to the main texture
+    rend.material.SetTextureOffset("_MainTex", new Vector2(offsetX, 0));
+}
+```
+
+Resultado:
+![alt text](Unity_w9X7hLsj46.gif)
+
+## Tarea: Aplicar efecto parallax usando la técnica de scroll en la que se mueve continuamente la posición del fondo.
+
+## Tarea: Aplicar efecto parallax actualizando el offset de la textura.
+1. Igual que los apartados anteriores, hay que configurar las texturas para que **warp mode** sea **repeat**
+2. Añadir varias capas y configurar las distancias de cada una respecto al juegador.
+![alt text](image-7.png)
+3. Crear un script llamado **ParallaxController.cs**
+Lo que hace script es que respecto a la camara, calcula la distancia entre la camara y cada capa, las capas más lejanas, se desplazan con menos velocidad, y las más cerca, se desplazan más rápido.
+utlizando lo siguiente codigo para que los objetos fondos mueven con la camara y el personaje.
+```
+transform.position = new Vector3(cam.position.x, transform.position.y, transform.position.z);
+```
+
+Código completo
+```
+using UnityEngine;
+
+public class ParallaxController : MonoBehaviour
+{
+    [Header("Camera Settings")]
+    private Transform cam;             // camara
+    private Vector3 camStartPos;       // Camera start position
+
+    [Header("Background Settings")]
+    private GameObject[] backgrounds;  // Array of background layers
+    private Material[] mats;           // Materials for each layer
+    private float[] backSpeed;         // Parallax speed for each layer - fast for the 1 and slow for the last
+    private float farthestBack;        // Z distance of farthest background
+
+    [Range(0.01f, 0.1f)]
+    public float parallaxSpeed = 0.05f; // Base parallax speed
+
+    void Start()
+    {
+        cam = Camera.main.transform;
+        camStartPos = cam.position;
+
+        int backCount = transform.childCount;  // Number of background layers
+        backgrounds = new GameObject[backCount];
+        mats = new Material[backCount];
+        backSpeed = new float[backCount];
+
+        // Initialize arrays
+        for (int i = 0; i < backCount; i++)
+        {
+            backgrounds[i] = transform.GetChild(i).gameObject;
+            mats[i] = backgrounds[i].GetComponent<Renderer>().material;
+        }
+
+        // calculate parallaxspeed using distance of layer and camera
+        CalculateBackSpeed(backCount);
+    }
+
+    // Calculate relative speed for each background layer
+    void CalculateBackSpeed(int backCount)
+    {
+        farthestBack = 0f;
+
+        // Find farthest background from camera
+        for (int i = 0; i < backCount; i++)
+        {
+            float zDist = Mathf.Abs(backgrounds[i].transform.position.z - cam.position.z);
+            if (zDist > farthestBack)
+                farthestBack = zDist;
+        }
+
+        // Set speed factor for each layer
+        // Closer to the camera - Higher value - Faster scrolling
+        // Farther from the camera - Lower value - Slower scrolling - Creates a sense of depth
+        for (int i = 0; i < backCount; i++)
+        {
+            float zDist = Mathf.Abs(backgrounds[i].transform.position.z - cam.position.z);
+            backSpeed[i] = 1 - (zDist / farthestBack); // Nearer layers move faster
+        }
+    }
+
+    void LateUpdate()
+    {
+        float distance = cam.position.x - camStartPos.x;
+        
+        // move with camera
+        transform.position = new Vector3(cam.position.x, transform.position.y, transform.position.z);
+
+        for (int i = 0; i < backgrounds.Length; i++)
+        {
+            float speed = backSpeed[i] * parallaxSpeed;
+            Vector2 offset = new Vector2(distance * speed, 0);
+            mats[i].SetTextureOffset("_MainTex", offset);
+        }
+    }
+}
+```
+
+Resultado: 
+![alt text](Unity_VGS2Tzyhwz.gif)
+
+## Tarea: En tu escena 2D crea un prefab que sirva de base para generar un tipo de objetos sobre los que vas a hacer un pooling de objetos que se recolectarán continuamente en tu escena. Cuando un objeto es recolectado debe pasar al pool y dejar de visualizarse. Este objeto estará disponible en el pool. En la escena, siempre que sea posible debe haber una cantidad de objetos que fijes, hasta que el número de objetos que no se han eliminado sea menor que dicha cantidad. Recuerda que para generar los objetos puedes usar el método Instantiate. Los objetos ya creados pueden estar activos o no, para ello usar SetActive.
+
+
