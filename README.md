@@ -13,6 +13,7 @@
 ## La cámara está fija, el fondo se va desplazando en cada frame. Se usan dos fondos. Uno de ellos lo va viendo la cámara en todo momento, el otro está preparado para el momento en que se ha avanzado hasta el punto en el que
 la vista de la cámara ya no abarcaría el fondo inicial. 
 
+
 ### Tarea: Aplicar un fondo con scroll a tu escena utilizando la técnica descrita en a.
 1. Eligir una imagen como un fondo con scroll, configurar la imagen
 ![alt text](image-3.png)
@@ -93,7 +94,7 @@ Resultado2:
 // utilizando esta condicion
 pos_camera.x + cameraWidth > pos_fondoA.x + spriteWidth/2
 ```
-2. Un GameObject empty para controlar los fondos y la velocidad de camara
+1. Un GameObject empty para controlar los fondos y la velocidad de camara
 ![alt text](image-4.png) 
 
 
@@ -107,10 +108,10 @@ La camara mueve hacia derecha, y los fondos intercambian cuando cumple la condic
 1. Configuracion de la textura
 ![alt text](image-6.png)
 
-2. Configuracion de un objeto **Plane** como fondo 
+1. Configuracion de un objeto **Plane** como fondo 
 ![alt text](image-5.png)
 
-3. Crear un script para aplicar el offset al material
+1. Crear un script para aplicar el offset al material
 ```
 void Update()
 {
@@ -125,12 +126,23 @@ Resultado:
 ![alt text](Unity_w9X7hLsj46.gif)
 
 ## Tarea: Aplicar efecto parallax usando la técnica de scroll en la que se mueve continuamente la posición del fondo.
+1. Reutilizar el codigo de **ScrollBackground.cs**, añadiendo el intercambio cuando el usuario hacia izquierda
+2. La condicion que activa el intercambio de fondos es: cuando el borde de la camara sea mayor que el borde izq o el borde der del fondo,
+
+Resultado:
+Intercambia según izquierda o derecha, consigue scroll ambos lados
+![alt text](Unity_hz6i5DZWhf-1.gif)
+
+Resultado:
+Problema, puesto que las capas lejas están más lejos no se actualizan como la primera capa
+![alt text](Unity_hz6i5DZWhf.gif)
+
 
 ## Tarea: Aplicar efecto parallax actualizando el offset de la textura.
 1. Igual que los apartados anteriores, hay que configurar las texturas para que **warp mode** sea **repeat**
 2. Añadir varias capas y configurar las distancias de cada una respecto al juegador.
 ![alt text](image-7.png)
-3. Crear un script llamado **ParallaxController.cs**
+1. Crear un script llamado **ParallaxController.cs**
 Lo que hace script es que respecto a la camara, calcula la distancia entre la camara y cada capa, las capas más lejanas, se desplazan con menos velocidad, y las más cerca, se desplazan más rápido.
 utlizando lo siguiente codigo para que los objetos fondos mueven con la camara y el personaje.
 ```
