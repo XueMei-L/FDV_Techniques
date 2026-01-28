@@ -128,10 +128,12 @@ Resultado:
 ## Tarea: Aplicar efecto parallax usando la técnica de scroll en la que se mueve continuamente la posición del fondo.
 1. Reutilizar el codigo de **ScrollBackground.cs**, añadiendo el intercambio cuando el usuario hacia izquierda
 2. La condicion que activa el intercambio de fondos es: cuando el borde de la camara sea mayor que el borde izq o el borde der del fondo,
+3. Aplicar el parallax a cada layer, cuando sea más cerca mueve más rápido y cuando sea más lejos mueve más lento.
+![alt text](image-8.png)
 
 Resultado:
 Intercambia según izquierda o derecha, consigue scroll ambos lados
-![alt text](Unity_hz6i5DZWhf-1.gif)
+![alt text](Unity_duVFXjwsCU.gif)
 
 Resultado:
 Problema, puesto que las capas lejas están más lejos no se actualizan como la primera capa
@@ -234,4 +236,123 @@ Resultado:
 
 ## Tarea: En tu escena 2D crea un prefab que sirva de base para generar un tipo de objetos sobre los que vas a hacer un pooling de objetos que se recolectarán continuamente en tu escena. Cuando un objeto es recolectado debe pasar al pool y dejar de visualizarse. Este objeto estará disponible en el pool. En la escena, siempre que sea posible debe haber una cantidad de objetos que fijes, hasta que el número de objetos que no se han eliminado sea menor que dicha cantidad. Recuerda que para generar los objetos puedes usar el método Instantiate. Los objetos ya creados pueden estar activos o no, para ello usar SetActive.
 
+1. Crar un objeto vacio para controlar pooling objetos llamado **GameManager**
+2. Crear prefab para los objetos collectibles.
+![alt text](image-9.png)
+3. Crear un script para manejo de pool, la lógica seria, inicialmente en el pool tiene maxCoin * 2 de cantidad de estrellas, inicialmente todos están oculto. Activa una cierta cantidad de estrellas en la escena, cuando la cantidad de estrella es menor que la cantidad pretefinida, genera nueva estrella con la posición random en la escena. y cuando el jugador coleciona una estrealla, dicha estrella será oculta y vuelva al pooling.
+3. Codigos:
 
+*ObjectPoolManager.cs* para el control de estrellas y pooling
+```
+using System.Collections.Generic;
+using UnityEngine;
+
+public class ObjectPoolManager : MonoBehaviour
+{
+    [Header("Prefabs & Pool Settings")]
+    public GameObject starCoinPrefab;   // Star prefab
+    public int maxCoins = 5;           // Number of active coins at a time
+    public Transform coinsParent;       // Parent object for organization
+
+    private List<GameObject> pool = new List<GameObject>();        // pooling objects
+    private List<GameObject> activeCoins = new List<GameObject>(); // Active coins in scene
+
+    void Start()
+    {
+        // Initialize the pool with extra coins
+        for (int i = 0; i < maxCoins * 2; i++)
+        {
+            GameObject coin = Instantiate(starCoinPrefab, coinsParent);
+            coin.GetComponent<StarCoinPerfab>().Init(this);
+            coin.SetActive(false);
+            pool.Add(coin);
+        }
+
+        // Spawn initial active coins
+        for (int i = 0; i < maxCoins; i++)
+        {
+            SpawnCoin();
+        }
+    }
+
+    void Update()
+    {
+        // Keep maxCoins in the scene
+        while (activeCoins.Count < maxCoins)
+        {
+            SpawnCoin();
+        }
+    }
+
+    // get the new star coin then add to activeCoins list
+    public void SpawnCoin()
+    {
+        GameObject coin;
+
+        if (pool.Count > 0)
+        {
+            coin = pool[0];
+            pool.RemoveAt(0);
+        }
+        else
+        {
+            // If pool is empty, instantiate a new coin
+            coin = Instantiate(starCoinPrefab, coinsParent);
+            coin.GetComponent<StarCoinPerfab>().Init(this);
+        }
+
+        // Activate and place coin
+        coin.SetActive(true);
+        coin.transform.position = GetRandomPosition();
+        activeCoins.Add(coin);
+    }
+
+    // when the player get the starcoin, dont destroy it, use the SetActive to hide it and add to the pool
+    public void ReturnToPool(GameObject coin)
+    {
+        if (activeCoins.Contains(coin))
+            activeCoins.Remove(coin);
+
+        coin.SetActive(false);
+
+        if (!pool.Contains(coin))
+            pool.Add(coin);
+    }
+
+    // set the new position of the starcoin
+    Vector2 GetRandomPosition()
+    {
+        return new Vector2(
+            Random.Range(-20f, 50f),        // position x
+            Random.Range(-0.5f, 1f)         // position y
+        );
+    }
+}
+```
+
+*StarCoinPerfab.cs*
+```
+using UnityEngine;
+
+public class StarCoinPerfab : MonoBehaviour
+{
+    private ObjectPoolManager pool;
+
+    public void Init(ObjectPoolManager poolManager)
+    {
+        pool = poolManager;
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            // Return coin to pool instead of destroying
+            pool.ReturnToPool(gameObject);
+        }
+    }
+}
+```
+
+Resultado: 
+![alt text](Code_01Ftad1iQ4.gif)
