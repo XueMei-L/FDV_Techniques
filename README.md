@@ -16,7 +16,7 @@ la vista de la cámara ya no abarcaría el fondo inicial.
 
 ### Tarea: Aplicar un fondo con scroll a tu escena utilizando la técnica descrita en a.
 1. Eligir una imagen como un fondo con scroll, configurar la imagen
-![alt text](image-3.png)
+![alt text](imgs/image-3.png)
 
 1. Poner los fondos en paralelas
 2. Crear un **GameObject Empty** para manejar los fondos
@@ -81,10 +81,10 @@ public class ParallaxBackground : MonoBehaviour
 ```
 
 Resultado: 
-![alt text](Unity_U7xMrMExc7.gif)
+![alt text](imgs/Unity_U7xMrMExc7.gif)
 
 Resultado2:
-![alt text](Unity_EfQqwV6WDz.gif)
+![alt text](imgs/Unity_EfQqwV6WDz.gif)
 
 
 ## La cámara se desplaza a la derecha y el fondo está estático. 
@@ -95,21 +95,21 @@ Resultado2:
 pos_camera.x + cameraWidth > pos_fondoA.x + spriteWidth/2
 ```
 1. Un GameObject empty para controlar los fondos y la velocidad de camara
-![alt text](image-4.png) 
+![alt text](imgs/image-4.png) 
 
 
 Resultado:
 La camara mueve hacia derecha, y los fondos intercambian cuando cumple la condicion.
-![alt text](Unity_bCrvCehYX0.gif)
+![alt text](imgs/Unity_bCrvCehYX0.gif)
 
 
 ## Desplazar el punto a partir del cual se aplica la textura. La parte sobrante se aplica en el espacio vacío.
 ### Tarea: Aplicar un fondo a tu escena aplicando la técnica del desplazamiento de textura
 1. Configuracion de la textura
-![alt text](image-6.png)
+![alt text](imgs/image-6.png)
 
 1. Configuracion de un objeto **Plane** como fondo 
-![alt text](image-5.png)
+![alt text](imgs/image-5.png)
 
 1. Crear un script para aplicar el offset al material
 ```
@@ -123,27 +123,27 @@ void Update()
 ```
 
 Resultado:
-![alt text](Unity_w9X7hLsj46.gif)
+![alt text](imgs/Unity_w9X7hLsj46.gif)
 
 ## Tarea: Aplicar efecto parallax usando la técnica de scroll en la que se mueve continuamente la posición del fondo.
 1. Reutilizar el codigo de **ScrollBackground.cs**, añadiendo el intercambio cuando el usuario hacia izquierda
 2. La condicion que activa el intercambio de fondos es: cuando el borde de la camara sea mayor que el borde izq o el borde der del fondo,
 3. Aplicar el parallax a cada layer, cuando sea más cerca mueve más rápido y cuando sea más lejos mueve más lento.
-![alt text](image-8.png)
+![alt text](imgs/image-8.png)
 
 Resultado:
 Intercambia según izquierda o derecha, consigue scroll ambos lados
-![alt text](Unity_duVFXjwsCU.gif)
+![alt text](imgs/Unity_duVFXjwsCU.gif)
 
 Resultado:
 Problema, puesto que las capas lejas están más lejos no se actualizan como la primera capa
-![alt text](Unity_hz6i5DZWhf.gif)
+![alt text](imgs/Unity_hz6i5DZWhf.gif)
 
 
 ## Tarea: Aplicar efecto parallax actualizando el offset de la textura.
 1. Igual que los apartados anteriores, hay que configurar las texturas para que **warp mode** sea **repeat**
 2. Añadir varias capas y configurar las distancias de cada una respecto al juegador.
-![alt text](image-7.png)
+![alt text](imgs/image-7.png)
 1. Crear un script llamado **ParallaxController.cs**
 Lo que hace script es que respecto a la camara, calcula la distancia entre la camara y cada capa, las capas más lejanas, se desplazan con menos velocidad, y las más cerca, se desplazan más rápido.
 utlizando lo siguiente codigo para que los objetos fondos mueven con la camara y el personaje.
@@ -232,13 +232,13 @@ public class ParallaxController : MonoBehaviour
 ```
 
 Resultado: 
-![alt text](Unity_VGS2Tzyhwz.gif)
+![alt text](imgs/Unity_VGS2Tzyhwz.gif)
 
 ## Tarea: En tu escena 2D crea un prefab que sirva de base para generar un tipo de objetos sobre los que vas a hacer un pooling de objetos que se recolectarán continuamente en tu escena. Cuando un objeto es recolectado debe pasar al pool y dejar de visualizarse. Este objeto estará disponible en el pool. En la escena, siempre que sea posible debe haber una cantidad de objetos que fijes, hasta que el número de objetos que no se han eliminado sea menor que dicha cantidad. Recuerda que para generar los objetos puedes usar el método Instantiate. Los objetos ya creados pueden estar activos o no, para ello usar SetActive.
 
 1. Crar un objeto vacio para controlar pooling objetos llamado **GameManager**
 2. Crear prefab para los objetos collectibles.
-![alt text](image-9.png)
+![alt text](imgs/image-9.png)
 3. Crear un script para manejo de pool, la lógica seria, inicialmente en el pool tiene maxCoin * 2 de cantidad de estrellas, inicialmente todos están oculto. Activa una cierta cantidad de estrellas en la escena, cuando la cantidad de estrella es menor que la cantidad pretefinida, genera nueva estrella con la posición random en la escena. y cuando el jugador coleciona una estrealla, dicha estrella será oculta y vuelva al pooling.
 3. Codigos:
 
@@ -356,3 +356,6 @@ public class StarCoinPerfab : MonoBehaviour
 
 Resultado: 
 ![alt text](Code_01Ftad1iQ4.gif)
+
+Tarea: Revisa tu código de la entrega anterior e indica las mejoras que podrías hacer de cara al rendimiento.
+Opinión personal: personalmente considero usar efecto Parallax, puesto que 
